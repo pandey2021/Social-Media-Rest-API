@@ -1,0 +1,28 @@
+{
+  "name": "social_media_rest_api",
+  "version": "1.0.0",
+  "description": "Rest API for social media",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pandey2021/Social-Media-Rest-API.git"
+  },
+  "author": "Samir Kumar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pandey2021/Social-Media-Rest-API/issues"
+  },
+  "homepage": "https://github.com/pandey2021/Social-Media-Rest-API#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.0.0",
+    "mongoose": "^7.6.3",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.0.1"
+  }
+}
