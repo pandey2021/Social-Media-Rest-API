@@ -15,7 +15,8 @@ const postSchema = new mongoose.Schema({
     likes: {
         type: Array,
         default: []
-    }
+    },
+    
 },
     { timestamps: true }  // this will automatically manage when a document is created or updated
     // add two fields automatically: created_at, updated_at

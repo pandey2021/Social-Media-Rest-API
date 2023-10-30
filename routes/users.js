@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 // update a user
 // can update all details
 router.put("/update/:id", async (req, res) => {
-    if (req.params.id == req.body.id || req.body.isAdmin) {
+    if (req.params.id == req.payload._id || req.payload.isAdmin) {
         if (req.body.password) {
             try {
                 const salt = await bcrypt.genSalt(10);
@@ -33,7 +33,7 @@ router.put("/update/:id", async (req, res) => {
 
 // delete a user
 router.delete("/delete/:id", async (req, res) => {
-    if (req.params.id == req.body.id || req.body.isAdmin) {
+    if (req.params.id == req.payload._id || req.payload.isAdmin) {
         try {
             let data = await User.deleteOne(
                 { "_id": new mongoose.Types.ObjectId(req.params.id) }
@@ -62,7 +62,7 @@ router.get("/find/:id", async (req, res) => {
 // follow a user
 
 router.put("/:id/follow", async (req, res) => {
-    if (req.params.id !== req.body.id) {
+    if (req.params.id !== req.payload._id) {
         const user = await User.findById(req.params.id);
         const currentUser = await User.findById(req.body.id);
         if (!currentUser.followings.includes(user._id)) {
@@ -84,7 +84,7 @@ router.put("/:id/follow", async (req, res) => {
 // unfollow a user
 
 router.put("/:id/unfollow", async (req, res) => {
-    if (req.params.id !== req.body.id) {
+    if (req.params.id !== req.payload._id) {
         const user = await User.findById(req.params.id);
         const currentUser = await User.findById(req.body.id);
         if (currentUser.followings.includes(user._id)) {

@@ -25,7 +25,7 @@ router.post("/create", async (req, res) => {
 router.put("/update/:id", async (req, res) => {
     try {
         let post = await Post.findById(req.params.id);
-        if (post.userId === req.body.userId) {
+        if (post.userId === req.payload._id) {
             try {
                 const data = await Post.updateOne(
                     { _id: new mongoose.Types.ObjectId(req.params.id) },
@@ -52,7 +52,7 @@ router.delete("/delete/:id", async (req, res) => {
     try {
         let post = await Post.findById(req.params.id);
         console.log(post.userId, req.body.userId);
-        if (post.userId === req.body.userId) {
+        if (post.userId === req.payload._id) {
             try {
                 const data = await post.deleteOne();
                 res.status(200).send(data);
