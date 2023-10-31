@@ -22,12 +22,19 @@ router.post("/register", async (req, res) => {
             password: hashedPass,
             gender: req.body.gender
         });
-        const accessToken = jwt.generateAccessToken(newUser._doc);
-        const refreshToken = jwt.generateRefreshToken(newUser._doc);
-        jwt.saveRefreshToken(refreshToken);
         //save the user
         const data = await User.insertMany(newUser);
-        res.status(200).send({data, accessToken, refreshToken});
+        const user = {
+            "_id": data[0]._id,
+            "username": data[0].username,
+            "email": data[0].email
+        }
+        const accessToken = jwt.generateAccessToken(user);
+        const refreshToken = jwt.generateRefreshToken(user);
+        jwt.saveRefreshToken(refreshToken);
+
+
+        res.status(200).send({ data, accessToken, refreshToken });
     } catch (err) {
         res.status(500).send(err);
     }
@@ -44,22 +51,26 @@ router.post("/login", async (req, res) => {
         !userInfo && res.status(404).send("user not found");
         const isValidLogin = await bcrypt.compare(userpass, userInfo.password);
         !isValidLogin && res.status(400).send("incorrect username or password");
-        // jwt.deleteRefreshToken(refreshToken);
-        const accessToken = jwt.generateAccessToken(userInfo._doc);
-        const refreshToken = jwt.generateRefreshToken(userInfo._doc);
+        const user = {
+            "_id": userInfo._id,
+            "username": userInfo.username,
+            "email": userInfo.email
+        }
+        const accessToken = jwt.generateAccessToken(user);
+        const refreshToken = jwt.generateRefreshToken(user);
         jwt.saveRefreshToken(refreshToken);
-        res.status(200).send({userInfo,accessToken,refreshToken});
+        res.status(200).send({ userInfo, accessToken, refreshToken });
     } catch (err) {
         res.status(500).send(err);
     }
 });
 
-router.post("/logout", jwt.authenticate, (req,res)=>{
-    try{
+router.post("/logout", jwt.authenticate, (req, res) => {
+    try {
         const refreshToken = req.body.refreshToken;
         jwt.deleteRefreshToken(refreshToken);
         res.status(200).send(req.payload.username + " logout successfully");
-    }catch(err){
+    } catch (err) {
         res.status(500).send(err);
     }
 })

@@ -23,23 +23,20 @@ app.use("/posts", jwt_token.authenticate, postRoute);
 app.use("/auth", authRoute);
 app.use("/user", jwt_token.authenticate, userRoute);    // direct this to userRoute
 
-app.post("/api/refresh", (req,res)=>{
+app.post("/api/refresh", (req, res) => {
     const refreshToken = req.body.refreshToken;
-    if(!refreshToken) return res.status(401).send("please provide token");
-    if(!jwt_token.isRefreshTokenAvailable(refreshToken)) return res.status(403).send("not a valid token");
-    jwt.verify(refreshToken,process.env.refreshSecretToken,(err,payload)=>{
-        if(err){
+    if (!refreshToken) return res.status(401).send("please provide token");
+    if (!jwt_token.isRefreshTokenAvailable(refreshToken)) return res.status(403).send("not a valid token");
+    jwt.verify(refreshToken, process.env.refreshSecretToken, (err, payload) => {
+        if (err) {
             return res.status(400).send(err);
         }
-        console.log("samir kumar")
-        console.log(payload);
-        
+
         const newAccessToken = jwt_token.generateAccessToken(payload);
-        console.log("new access token generated...")
         const newRefreshToken = jwt_token.generateRefreshToken(payload);
         jwt_token.deleteRefreshToken(refreshToken);
         jwt_token.saveRefreshToken(newRefreshToken);
-        res.status(200).send({"accessToken": newAccessToken, "refreshToken": newRefreshToken});
+        res.status(200).send({ "accessToken": newAccessToken, "refreshToken": newRefreshToken });
     });
 })
 

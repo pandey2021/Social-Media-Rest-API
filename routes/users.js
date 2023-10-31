@@ -75,7 +75,6 @@ router.put("/:id/follow", async (req, res) => {
             }
         } else {
             res.status(403).send("already followed");
-            console.log("already followed");
         }
     } else {
         res.status(403).send("can't follow himself");
@@ -99,7 +98,6 @@ router.put("/:id/unfollow", async (req, res) => {
             }
         } else {
             res.status(403).send("already unfollowed");
-            console.log("already unfollowed");
         }
     } else {
         res.status(403).send("can't unfollow himself");
